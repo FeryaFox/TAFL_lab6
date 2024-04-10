@@ -1,6 +1,7 @@
-from TAFLCore.Automate.Automate import Automate, AutomateUtils, TableState
+from TAFLCore.Automate.Automate import Automate, AutomateUtils, TableState, State
 from utils.numberUtils import NumberUtils
 import copy
+from dataclasses import dataclass
 
 
 class TAFL6:
@@ -26,15 +27,146 @@ class TAFL6:
         without_unattainable_stated_automate.sort_table_states()
         return without_unattainable_stated_automate
 
+    def partition_equivalence_classes_(
+            self,
+            automate: Automate
+    ) -> list[list[str]]:
+
+        equivalence_classes: list[list[str]] = [
+            automate.get_ended_table_state_aliases(),
+            automate.get_not_ended_table_state_aliases()
+        ]
+        num_of_classes = 0
+        while True:
+            print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+            num_of_classes += 1
+            equivalence_classes_old = copy.deepcopy(equivalence_classes)
+            equivalence_classes = []
+            temp_classes: dict[int, list[str]] = {}
+            for class_num in range(len(equivalence_classes_old)):
+                temp_classes: dict[int, list[str]] = {}
+                for class_obj in equivalence_classes_old[class_num]:
+                    for signal in automate.get_signals_name():
+                        _ = list(automate[class_obj, signal].value)[0]
+                        self.__add_equivalence_classes_temp(
+                            temp_classes,
+                            self.__search_class(equivalence_classes_old, _),
+                            class_obj
+                        )
+
+
+                count_dict = {}
+
+                for key, value in temp_classes.items():
+
+                    temp_dict = {}
+                    for item in value:
+                        if item in temp_dict:
+                            temp_dict[item] += 1
+                        else:
+                            temp_dict[item] = 1
+
+                    count_dict[key] = temp_dict
+
+                print(count_dict)
+                aa = []
+                for key, value in count_dict.items():
+                    for key1, value1 in value.items():
+                        if value1 == 2:
+                            aa.append(key1)
+
+                for i in aa:
+                    for key, value in temp_classes.items():
+                        try:
+                            value.remove(i)
+                            value.remove(i)
+                        except (ValueError, KeyError):
+                            pass
+                for i in temp_classes:
+                    if i != num_of_classes:
+                        for j in temp_classes[i]:
+                            try:
+                                temp_classes[num_of_classes].remove(j)
+                            except (ValueError, KeyError):
+                                pass
+                for i in temp_classes:
+                    equivalence_classes.append(list(set(temp_classes[i])))
+                equivalence_classes.append([_ for _ in aa])
+
+            equivalence_classes = [_ for _ in equivalence_classes if _]
+
+            if equivalence_classes == equivalence_classes_old:
+                return equivalence_classes
+
     @staticmethod
-    def partition_equivalence_classes(automate: Automate) -> list[TableState]:
-        equivalence_classes = [
+    def __search_class(
+            equivalence_classes: list[list[str]],
+            alias: str
+    ) -> int:
+        for i in range(len(equivalence_classes)):
+            for j in equivalence_classes[i]:
+                if j == alias:
+                    return i
+
+    @staticmethod
+    def __add_equivalence_classes_temp(
+            classes: dict[int, list[str]],
+            class_num: int,
+            alias: str
+    ) -> dict[int, list[str]]:
+        if class_num not in classes:
+            classes[class_num] = []
+        classes[class_num].append(alias)
+        return classes
+
+    @staticmethod
+    def partition_equivalence_classes(automate: Automate) -> None:
+        # @dataclass
+        # class Temp:
+        #     state_alias: str
+        #     signal: str
+        #     equivalence_class: int
+        #
+        # equivalence_classes: dict[int, list[str]] = {
+        #     1: automate.get_ended_table_state_aliases(),
+        #     2: automate.get_not_ended_table_state_aliases()
+        # }
+        # num_of_classes = 0
+        # print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+        #
+        # temp: dict[int, list[Temp]] = {}
+        #
+        # while True:
+        #     for i in equivalence_classes:
+        #         for j in equivalence_classes[i]:
+        #             for k in automate.get_signals_name():
+        #                 _ = list(automate[j, k].value)[0]
+        #                 for ii in equivalence_classes:
+        #                     for jj in equivalence_classes[ii]:
+        #                         if jj == _:
+        #                             if i not in temp:
+        #                                 temp[i] = []
+        #                             temp[i].append(
+        #                                 Temp(
+        #                                     j,
+        #                                     k,
+        #                                     ii
+        #                                 )
+        #                             )
+        #     import pprint
+        #     pprint.pprint(temp)
+        #
+        #     for i in temp:
+        #         for j in temp[i]:
+        #            ...
+        #
+        #     break
+        equivalence_classes: list[list[str]] = [
             automate.get_ended_table_state_aliases(),
             automate.get_not_ended_table_state_aliases()
         ]
         num_of_classes = 0
         print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
-
         while True:
             flag = False
             old_equivalence_classes = copy.deepcopy(equivalence_classes)
@@ -53,9 +185,12 @@ class TAFL6:
                     if new_equivalence_classes == old_equivalence_classes[i]:
                         flag = False
                     else:
+                        # for j in new_equivalence_classes:
+                        #     equivalence_classes[i].remove(j)
+                        # equivalence_classes.append(new_equivalence_classes)
                         for j in new_equivalence_classes:
                             equivalence_classes[i].remove(j)
-                        equivalence_classes.append(new_equivalence_classes)
+                            equivalence_classes.append([j])
 
             num_of_classes += 1
             print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
@@ -107,7 +242,6 @@ class TAFL6:
                         j,
                         checked
                     )
-
 
     @staticmethod
     def __create_table_state(

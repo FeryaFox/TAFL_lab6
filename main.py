@@ -5,8 +5,7 @@ from TAFL6.TAFL6 import TAFL6
 from TAFL5.TAFL5 import TAFL5
 from TAFL6.TAFL6Inputer import TAFL6Inputer
 from TAFL5.TAFL5Menu import TAFL5Menu
-from TAFLCore.Automate import Automate, AutomateUtils
-
+from TAFLCore.Automate import Automate, AutomateUtils, TableState, State
 
 
 def main():
@@ -105,7 +104,8 @@ def main():
         print("Автомат детерменизированный")
     else:
         print("Автомат недерменизированный")
-        print(tafl5.deparmenize_automate(without_unattainable_stated_automate))
+    print(tafl5.deparmenize_automate(without_unattainable_stated_automate))
+    # Example usage:
 
     print(tafl.partition_equivalence_classes(without_unattainable_stated_automate))
 
