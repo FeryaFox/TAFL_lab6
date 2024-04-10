@@ -120,7 +120,7 @@ class TAFL6:
         return classes
 
     @staticmethod
-    def partition_equivalence_classes(automate: Automate) -> None:
+    def partition_equivalence_classes(automate: Automate):
         # @dataclass
         # class Temp:
         #     state_alias: str
@@ -166,7 +166,7 @@ class TAFL6:
             automate.get_not_ended_table_state_aliases()
         ]
         num_of_classes = 0
-        print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+        # print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
         while True:
             flag = False
             old_equivalence_classes = copy.deepcopy(equivalence_classes)
@@ -185,17 +185,18 @@ class TAFL6:
                     if new_equivalence_classes == old_equivalence_classes[i]:
                         flag = False
                     else:
-                        # for j in new_equivalence_classes:
-                        #     equivalence_classes[i].remove(j)
-                        # equivalence_classes.append(new_equivalence_classes)
                         for j in new_equivalence_classes:
                             equivalence_classes[i].remove(j)
-                            equivalence_classes.append([j])
+                        equivalence_classes.append(new_equivalence_classes)
+                        # for j in new_equivalence_classes:
+                        #     equivalence_classes[i].remove(j)
+                        #     equivalence_classes.append([j])
 
             num_of_classes += 1
-            print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+            # print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
             if not flag:
                 break
+        return equivalence_classes
 
     def __delete_unattainable_stated(
             self,
