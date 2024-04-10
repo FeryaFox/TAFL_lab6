@@ -119,6 +119,7 @@ class TAFL6:
         classes[class_num].append(alias)
         return classes
 
+
     @staticmethod
     def partition_equivalence_classes(automate: Automate):
         # @dataclass
@@ -166,36 +167,92 @@ class TAFL6:
             automate.get_not_ended_table_state_aliases()
         ]
         num_of_classes = 0
-        # print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+        print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+        # while True:
+        #     flag = False
+        #     old_equivalence_classes = copy.deepcopy(equivalence_classes)
+        #     for i in range(len(old_equivalence_classes)):
+        #         new_equivalence_classes = []
+        #         for j in old_equivalence_classes[i]:
+        #             for k in automate.get_signals_name():
+        #                 _ = list(automate[j, k].value)[0]
+        #                 if _ == "":
+        #                     continue
+        #
+        #                 if _ not in old_equivalence_classes[i] and j not in new_equivalence_classes:
+        #                     flag = True
+        #                     new_equivalence_classes.append(j)
+        #         if new_equivalence_classes:
+        #             if new_equivalence_classes == old_equivalence_classes[i]:
+        #                 flag = False
+        #             else:
+        #                 for j in new_equivalence_classes:
+        #                     equivalence_classes[i].remove(j)
+        #                 equivalence_classes.append(new_equivalence_classes)
+        #                 # for j in new_equivalence_classes:
+        #                 #     equivalence_classes[i].remove(j)
+        #                 #     equivalence_classes.append([j])
+        #
+        #     num_of_classes += 1
+        #     print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+        #     if not flag:
+        #         break
+
         while True:
             flag = False
             old_equivalence_classes = copy.deepcopy(equivalence_classes)
             for i in range(len(old_equivalence_classes)):
                 new_equivalence_classes = []
-                for j in old_equivalence_classes[i]:
-                    for k in automate.get_signals_name():
+                for k in automate.get_signals_name():
+                    for j in old_equivalence_classes[i]:
+
+                        if len(old_equivalence_classes[i]) == 1:
+                            continue
                         _ = list(automate[j, k].value)[0]
                         if _ == "":
                             continue
-
                         if _ not in old_equivalence_classes[i] and j not in new_equivalence_classes:
                             flag = True
                             new_equivalence_classes.append(j)
-                if new_equivalence_classes:
-                    if new_equivalence_classes == old_equivalence_classes[i]:
-                        flag = False
-                    else:
-                        for j in new_equivalence_classes:
-                            equivalence_classes[i].remove(j)
-                        equivalence_classes.append(new_equivalence_classes)
-                        # for j in new_equivalence_classes:
-                        #     equivalence_classes[i].remove(j)
-                        #     equivalence_classes.append([j])
+
+                        if new_equivalence_classes:# вот туть немного подвинул на да...
+                            flag_ = False
+                            try:
+                                equivalence_classes.remove(new_equivalence_classes)
+                            except (ValueError, KeyError):
+                                pass
+                            if new_equivalence_classes == old_equivalence_classes[i]:
+                                flag = False
+
+
+
+                            for ___ in equivalence_classes:
+                                if ___ == new_equivalence_classes:
+                                    flag_ = True
+                                    break
+                            if flag_:
+                                continue
+
+                            else:
+                                for j in new_equivalence_classes:
+                                    try:
+                                        # equivalence_classes[i].remove(j)
+                                        equivalence_classes[i].remove(j)
+                                    except (ValueError, KeyError, IndexError):
+                                        pass
+                                # equivalence_classes.append(new_equivalence_classes)
+                                #     equivalence_classes[i].remove(j)
+                                    equivalence_classes.append([j])
+                                # for j in new_equivalence_classes:
+                                #     equivalence_classes[i].remove(j)
+                                #     equivalence_classes.append([j])
 
             num_of_classes += 1
-            # print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+            print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
             if not flag:
                 break
+
+
         return equivalence_classes
 
     def __delete_unattainable_stated(
