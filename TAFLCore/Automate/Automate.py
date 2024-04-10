@@ -228,7 +228,6 @@ class Automate:
 
         return row
 
-
     def to_dict(self) -> AutomateDict:
         s = []
 
@@ -317,6 +316,20 @@ class Automate:
                 r.append(i.alias)
         return r
 
+    def get_ended_table_state_aliases(self) -> list[str]:
+        r = []
+        for i in self.__states:
+            if i.is_end:
+                r.append(i.alias)
+        return r
+
+    def get_not_ended_table_state_aliases(self) -> list[str]:
+        r = []
+        for i in self.__states:
+            if not i.is_end:
+                r.append(i.alias)
+        return r
+
     def is_table_state_ended_by_alias(self, alias: str) -> bool:
         for state in self.__states:
             if state.alias == alias:
@@ -336,6 +349,14 @@ class Automate:
 
         self.__states = [self.__states[i] for i in sorted_indices]
         self.__matrix = [self.__matrix[i] for i in sorted_indices]
+
+    def is_deterministic(self) -> bool:
+        for state in self.__states:
+            for signal in self.__signals:
+                transitions = self[state.alias, signal].value
+                if len(transitions) > 1:
+                    return False
+        return True
 
 
 class AutomateUtils:

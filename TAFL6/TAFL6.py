@@ -1,4 +1,6 @@
 from TAFLCore.Automate.Automate import Automate, AutomateUtils, TableState
+from utils.numberUtils import NumberUtils
+import copy
 
 
 class TAFL6:
@@ -23,6 +25,42 @@ class TAFL6:
             )
         without_unattainable_stated_automate.sort_table_states()
         return without_unattainable_stated_automate
+
+    @staticmethod
+    def partition_equivalence_classes(automate: Automate) -> list[TableState]:
+        equivalence_classes = [
+            automate.get_ended_table_state_aliases(),
+            automate.get_not_ended_table_state_aliases()
+        ]
+        num_of_classes = 0
+        print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+
+        while True:
+            flag = False
+            old_equivalence_classes = copy.deepcopy(equivalence_classes)
+            for i in range(len(old_equivalence_classes)):
+                new_equivalence_classes = []
+                for j in old_equivalence_classes[i]:
+                    for k in automate.get_signals_name():
+                        _ = list(automate[j, k].value)[0]
+                        if _ == "":
+                            continue
+
+                        if _ not in old_equivalence_classes[i] and j not in new_equivalence_classes:
+                            flag = True
+                            new_equivalence_classes.append(j)
+                if new_equivalence_classes:
+                    if new_equivalence_classes == old_equivalence_classes[i]:
+                        flag = False
+                    else:
+                        for j in new_equivalence_classes:
+                            equivalence_classes[i].remove(j)
+                        equivalence_classes.append(new_equivalence_classes)
+
+            num_of_classes += 1
+            print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+            if not flag:
+                break
 
     def __delete_unattainable_stated(
             self,
@@ -53,14 +91,14 @@ class TAFL6:
                 continue
             if i not in checked:
 
-                current_table_state = automate.get_table_state_by_alias(i)
-                without_unattainable_stated_automate.add_state_row(
-                    self.__create_table_state(
-                        i,
-                        current_table_state.is_start,
-                        current_table_state.is_end
-                    )
-                )
+                # current_table_state = automate.get_table_state_by_alias(i)
+                # without_unattainable_stated_automate.add_state_row(
+                #     self.__create_table_state(
+                #         i,
+                #         current_table_state.is_start,
+                #         current_table_state.is_end
+                #     )
+                # )
                 for j in automate.get_signals_name():
                     self.__delete_unattainable_stated(
                         automate,
@@ -69,6 +107,7 @@ class TAFL6:
                         j,
                         checked
                     )
+
 
     @staticmethod
     def __create_table_state(

@@ -1,13 +1,17 @@
+import copy
+
 from TAFL5.TAFL5Saver import TAFL5Saver
 from TAFL6.TAFL6 import TAFL6
+from TAFL5.TAFL5 import TAFL5
 from TAFL6.TAFL6Inputer import TAFL6Inputer
 from TAFL5.TAFL5Menu import TAFL5Menu
 from TAFLCore.Automate import Automate, AutomateUtils
 
 
+
 def main():
     tafl = TAFL6()
-
+    tafl5 = TAFL5()
     saver = TAFL5Saver()
     menu = TAFL5Menu()
     inputer = TAFL6Inputer()
@@ -94,7 +98,16 @@ def main():
                 print(input_automate)
                 input()
 
-    print(tafl.delete_unattainable_stated(input_automate))
+    without_unattainable_stated_automate = tafl.delete_unattainable_stated(input_automate)
+    print("Автомат, в котором удалены недостижимые вершины")
+    print(without_unattainable_stated_automate)
+    if without_unattainable_stated_automate.is_deterministic():
+        print("Автомат детерменизированный")
+    else:
+        print("Автомат недерменизированный")
+        print(tafl5.deparmenize_automate(without_unattainable_stated_automate))
+
+    print(tafl.partition_equivalence_classes(without_unattainable_stated_automate))
 
 if __name__ == "__main__":
     main()
