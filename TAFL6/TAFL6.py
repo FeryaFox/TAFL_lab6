@@ -27,6 +27,49 @@ class TAFL6:
         without_unattainable_stated_automate.sort_table_states()
         return without_unattainable_stated_automate
 
+    def partition_equivalence_classes__(
+            self,
+            automate: Automate
+    ) -> list[list[str]]:
+
+        equivalence_classes: list[list[str]] = [
+            automate.get_ended_table_state_aliases(),
+            automate.get_not_ended_table_state_aliases()
+        ]
+        num_of_classes = 0
+        while True:
+            print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+            num_of_classes += 1
+            equivalence_classes_old = copy.deepcopy(equivalence_classes)
+
+            temp_classes: dict[int, list[str]] = {}
+            for class_num in range(len(equivalence_classes_old)):
+
+                for signal in automate.get_signals_name():
+                    temp_classes: dict[int, list[str]] = {}
+                    for class_obj in equivalence_classes_old[class_num]:
+
+                        _ = list(automate[class_obj, signal].value)[0]
+                        self.__add_equivalence_classes_temp(
+                            temp_classes,
+                            self.__search_class(equivalence_classes_old, _),
+                            class_obj
+                        )
+
+                    if len(temp_classes) == 1:
+                        continue
+
+                    equivalence_classes[class_num] = []
+                    for i in temp_classes:
+                        equivalence_classes.append(list(set(temp_classes[i])))
+
+            equivalence_classes = [_ for _ in equivalence_classes if _]
+
+
+            if equivalence_classes == equivalence_classes_old:
+                print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
+                return equivalence_classes
+
     def partition_equivalence_classes_(
             self,
             automate: Automate

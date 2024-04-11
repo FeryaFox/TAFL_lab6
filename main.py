@@ -104,10 +104,12 @@ def main():
         print("Автомат детерменизированный")
     else:
         print("Автомат недерменизированный")
-    print(tafl5.deparmenize_automate(without_unattainable_stated_automate))
-    # Example usage:
+        without_unattainable_stated_automate = tafl5.deparmenize_automate(without_unattainable_stated_automate)
 
-    print(tafl.partition_equivalence_classes(without_unattainable_stated_automate))
+        print(without_unattainable_stated_automate)
+    # Example uцsage:
+
+    print(tafl.partition_equivalence_classes__(without_unattainable_stated_automate))
 
 if __name__ == "__main__":
     main()
