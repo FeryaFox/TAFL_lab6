@@ -28,6 +28,8 @@
 
 ### Linux
 
+![img.png](img/img3.png)
+
 ### Windows
 
 ![img.png](img/img.png)
@@ -35,6 +37,8 @@
 ## Основное задание
 
 ### Linux
+
+![img_1.png](img/img4.png)
 
 ### Windows
 
@@ -69,6 +73,8 @@ If you have a different case, a simpler menu will work.
 
 ### Linux
 
+![img.png](img/img3.png)
+
 ### Windows
 
 ![img.png](img/img.png)
@@ -76,6 +82,8 @@ If you have a different case, a simpler menu will work.
 ## The main task
 
 ### Linux
+
+![img_1.png](img/img4.png)
 
 ### Windows
 
