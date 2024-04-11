@@ -127,7 +127,7 @@ class Automate:
         self.__matrix = []
         if states is not None and signals is not None:
             self.__signals = signals
-            if isinstance(states, list) and states == 0:
+            if isinstance(states, list) and len(states) == 0:
                 self.__states = states
             elif isinstance(states[0], TableState):
                 self.__states = states

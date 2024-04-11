@@ -107,10 +107,10 @@ def main():
         print(without_unattainable_stated_automate)
 
     classes = tafl.partition_equivalence_classes(without_unattainable_stated_automate)
-    # tafl.create_representatives_automate(
-    #     classes,
-    #     without_unattainable_stated_automate
-    # )
+    print(tafl.create_representatives_automate(
+        classes,
+        without_unattainable_stated_automate
+    ))
 
 
 if __name__ == "__main__":

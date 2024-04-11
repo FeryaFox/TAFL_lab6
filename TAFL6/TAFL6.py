@@ -97,7 +97,7 @@ class TAFL6:
         representatives = {}
         for i in classes:
             representatives[random.choice(i)] = i
-        print(representatives)
+
         representatives_automate = Automate(
             states=[],
             signals=without_unattainable_stated_automate.get_signals_name()
@@ -115,7 +115,27 @@ class TAFL6:
                 if i in end_states:
                     is_end = True
 
+            _ = AutomateUtils.create_table_state_from_dict(
+                {
+                    'is_start': is_start,
+                    'is_end': is_end,
+                    'alias': f"[{key}]",
+                    "additional_info": None,
+                    "state": value
+                }
+            )
 
+            representatives_automate.add_state_row(_)
+
+        representatives_automate.sort_table_states()
+        for key, value in representatives.items():
+            alias = f"[{key}]"
+            for signal in without_unattainable_stated_automate.get_signals_name():
+                _ = list(without_unattainable_stated_automate[key, signal].value)[0]
+                for key_, value_ in representatives.items():
+                    if _ in value_:
+                        representatives_automate[alias, signal] = [f"[{key_}]"]
+        return representatives_automate
 
     def __delete_unattainable_stated(
             self,
