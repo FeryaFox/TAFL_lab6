@@ -38,7 +38,7 @@
 
 ### Windows
 
-![img.png](img2/img.png)
+![img.png](img/img1.png)
 
 
 # What kind of project (ENG)
@@ -79,4 +79,4 @@ If you have a different case, a simpler menu will work.
 
 ### Windows
 
-![img.png](img2/img.png)
+![img.png](img/img1.png)
