@@ -48,7 +48,6 @@ class State:
                 return
             self.value |= item
 
-
 @dataclass
 class TableState:
 
@@ -128,7 +127,9 @@ class Automate:
         self.__matrix = []
         if states is not None and signals is not None:
             self.__signals = signals
-            if isinstance(states[0], TableState):
+            if isinstance(states, list) and states == 0:
+                self.__states = states
+            elif isinstance(states[0], TableState):
                 self.__states = states
             elif isinstance(states[0], dict) or isinstance(states[0], TableStateDict):
                 self.__states = [AutomateUtils.create_table_state_from_dict(_) for _ in states]
@@ -227,6 +228,7 @@ class Automate:
                 row.append(f"{str(self[alias, i])}")
 
         return row
+
 
     def to_dict(self) -> AutomateDict:
         s = []
@@ -335,6 +337,14 @@ class Automate:
             if state.alias == alias:
                 return state.is_end
 
+    def is_deterministic(self) -> bool:
+        for state in self.__states:
+            for signal in self.__signals:
+                transitions = self[state.alias, signal].value
+                if len(transitions) > 1:
+                    return False
+        return True
+
     def to_string(self, highlighted_states: list[StateDict] | None = None) -> str:
         table = PrettyTable()
         table.field_names = [""] + self.__signals
@@ -349,15 +359,6 @@ class Automate:
 
         self.__states = [self.__states[i] for i in sorted_indices]
         self.__matrix = [self.__matrix[i] for i in sorted_indices]
-
-    def is_deterministic(self) -> bool:
-        for state in self.__states:
-            for signal in self.__signals:
-                transitions = self[state.alias, signal].value
-                if len(transitions) > 1:
-                    return False
-        return True
-
 
 class AutomateUtils:
     @staticmethod

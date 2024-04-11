@@ -7,7 +7,6 @@ from TAFL6.TAFL6Inputer import TAFL6Inputer
 from TAFL5.TAFL5Menu import TAFL5Menu
 from TAFLCore.Automate import Automate, AutomateUtils, TableState, State
 
-
 def main():
     tafl = TAFL6()
     tafl5 = TAFL5()
@@ -105,11 +104,14 @@ def main():
     else:
         print("Автомат недерменизированный")
         without_unattainable_stated_automate = tafl5.deparmenize_automate(without_unattainable_stated_automate)
-
         print(without_unattainable_stated_automate)
-    # Example uцsage:
 
-    print(tafl.partition_equivalence_classes__(without_unattainable_stated_automate))
+    classes = tafl.partition_equivalence_classes(without_unattainable_stated_automate)
+    # tafl.create_representatives_automate(
+    #     classes,
+    #     without_unattainable_stated_automate
+    # )
+
 
 if __name__ == "__main__":
     main()
