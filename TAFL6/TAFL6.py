@@ -65,6 +65,15 @@ class TAFL6:
 
             equivalence_classes = [_ for _ in equivalence_classes if _]
 
+            unique_lists = []
+
+
+            for sublist in equivalence_classes:
+                if sublist not in unique_lists:
+                    unique_lists.append(sublist)
+
+            equivalence_classes = unique_lists
+
             if equivalence_classes == equivalence_classes_old:
                 print(f"Ξ{NumberUtils.covert_number_to_degree(num_of_classes)} = {equivalence_classes}")
                 return equivalence_classes
@@ -166,14 +175,6 @@ class TAFL6:
                 continue
             if i not in checked:
 
-                # current_table_state = automate.get_table_state_by_alias(i)
-                # without_unattainable_stated_automate.add_state_row(
-                #     self.__create_table_state(
-                #         i,
-                #         current_table_state.is_start,
-                #         current_table_state.is_end
-                #     )
-                # )
                 for j in automate.get_signals_name():
                     self.__delete_unattainable_stated(
                         automate,
