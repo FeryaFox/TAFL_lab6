@@ -33,7 +33,7 @@ class TAFL5Inputer(BaseInputer):
                 while True:
 
                     try:
-                        print(f"Допустимые состояния: {", ".join(automate.get_all_states())}")
+                        print(f"Допустимые состояния: {', '.join(automate.get_all_states())}")
                         input_states = input(f"Введите состояния для ({state}, {signal})(через проблел)(например: 'q0 q1 q2')(или enter для задания пустого): \n").split()
                     except KeyboardInterrupt:
                         return automate

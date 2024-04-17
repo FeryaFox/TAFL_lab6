@@ -29,7 +29,7 @@ class State:
     def __str__(self) -> str:
         if len(self.value) == 0 or (len(self.value) == 1 and str(next(iter(self.value))) == ""):
             return "Ø"
-        return f"{", ".join(sorted(self.value))}"
+        return f"{', '.join(sorted(self.value))}"
 
     def __contains__(self, item: list[str] | set[str] | str) -> bool:
         if isinstance(item, str):
